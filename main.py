@@ -56,6 +56,7 @@ def index():
 def registrar_presenca():
     """Registra a hora em que o servidor recebeu o acionamento do sensor."""
     sensor_id = request.args.get("sensor_id", "sensor-1").strip() or "sensor-1"
+    print(request.headers)
     if len(sensor_id) > 100:
         return jsonify(erro="sensor_id deve ter no máximo 100 caracteres"), 400
 
