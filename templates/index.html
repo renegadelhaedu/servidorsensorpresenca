@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="refresh" content="30">
+    <title>Presenças | Sensor</title>
+    <style>
+        :root {
+            color-scheme: light;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #172033;
+            background: #f3f6fb;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; min-height: 100vh; }
+        header { background: #14213d; color: white; padding: 28px max(24px, calc((100% - 1080px) / 2)); }
+        header p { margin: 7px 0 0; color: #c4cee1; font-size: .95rem; }
+        h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -.03em; }
+        main { width: min(1080px, calc(100% - 40px)); margin: 34px auto; }
+        .summary { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+        .count-card { min-width: 190px; padding: 20px 24px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 16px #1720330a; }
+        .count { display: block; color: #176b55; font-size: 2rem; font-weight: 750; line-height: 1.1; }
+        .label { display: block; margin-top: 7px; color: #667085; font-size: .9rem; }
+        .hint { color: #667085; font-size: .9rem; }
+        .table-card { overflow: hidden; background: white; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 4px 16px #1720330a; }
+        .table-heading { padding: 20px 22px; border-bottom: 1px solid #e9edf3; }
+        h2 { margin: 0; font-size: 1.08rem; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 15px 22px; border-bottom: 1px solid #edf0f5; white-space: nowrap; }
+        th { color: #667085; font-size: .76rem; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; }
+        td { font-size: .94rem; }
+        tbody tr:last-child td { border-bottom: 0; }
+        .badge { display: inline-block; padding: 5px 10px; color: #176b55; background: #e7f5ef; border-radius: 999px; font-size: .82rem; }
+        .empty { padding: 42px 20px; color: #667085; text-align: center; }
+        footer { margin: 18px 0 0; color: #7b8494; font-size: .82rem; text-align: right; }
+        @media (max-width: 560px) {
+            header { padding: 24px 20px; }
+            main { width: calc(100% - 28px); margin: 22px auto; }
+            .summary { align-items: stretch; flex-direction: column; }
+            .count-card { width: 100%; }
+            .hint { margin: 0; }
+            th, td { padding: 13px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Painel de presenças</h1>
+        <p>Registros recebidos pelos sensores infravermelhos</p>
+    </header>
+    <main>
+        <section class="summary" aria-label="Resumo">
+            <div class="count-card">
+                <span class="count">{{ total }}</span>
+                <span class="label">presenças registradas</span>
+            </div>
+            <p class="hint">A página é atualizada automaticamente a cada 30 segundos.</p>
+        </section>
+
+        <section class="table-card" aria-labelledby="lista-presencas">
+            <div class="table-heading"><h2 id="lista-presencas">Atividade recente</h2></div>
+            {% if presencas %}
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Registro</th><th>Sensor</th><th>Data e horário</th></tr></thead>
+                        <tbody>
+                        {% for presenca in presencas %}
+                            <tr>
+                                <td>#{{ presenca.id }}</td>
+                                <td><span class="badge">{{ presenca.sensor_id }}</span></td>
+                                <td>{{ presenca.registrado_em }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty">Nenhuma presença recebida ainda. Os novos registros aparecerão aqui.</div>
+            {% endif %}
+        </section>
+        <footer>Exibindo até 200 registros mais recentes</footer>
+    </main>
+</body>
+</html>
